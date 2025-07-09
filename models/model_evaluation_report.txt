@@ -1,0 +1,20 @@
+Model Evaluation Report
+========================
+
+SVM:
+Precision: 84.67%
+Recall:    88.19%
+F1-Score:  86.39%
+AUC:       93.46%
+
+Random Forest:
+Precision: 99.83%
+Recall:    75.95%
+F1-Score:  86.27%
+AUC:       93.02%
+
+Hybrid Stacked:
+Precision: 95.74%
+Recall:    83.65%
+F1-Score:  89.29%
+AUC:       94.66%

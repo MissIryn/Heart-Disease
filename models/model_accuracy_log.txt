@@ -1,0 +1,7 @@
+Model Performance Summary
+==========================
+Dataset Split: 80% Training | 20% Testing
+
+SVM         - Train Accuracy: 98.64% | Test Accuracy: 86.11%
+RandomForest - Train Accuracy: 100.00% | Test Accuracy: 87.91%
+Hybrid      - Train Accuracy: 100.00% | Test Accuracy: 89.96%
