@@ -129,5 +129,5 @@ The hybrid model successfully outperformed individual models, meeting the goal o
 ---
 
 ##  Author
- 
+ Irene Arthur
 BSc Computer Science Final Year  
