@@ -90,7 +90,14 @@ models = {
     "Hybrid Stacked": hybrid_model
 }
 
-# ==========  EVALUATION ==========
+# ==========  EVALUATION ========== 
+# Store metrics
+model_names = []
+precisions = []
+recalls = []
+f1_scores = []
+aucs = []
+
 plt.figure(figsize=(8, 6))
 for name, model in models.items():
     print(f"\n Evaluating {name}...")
@@ -103,6 +110,13 @@ for name, model in models.items():
     recall = report['1']['recall'] * 100
     f1 = report['1']['f1-score'] * 100
     auc_score = roc_auc_score(y_test, y_proba) * 100
+    
+    # Save metrics
+    model_names.append(name)
+    precisions.append(precision)
+    recalls.append(recall)
+    f1_scores.append(f1)
+    aucs.append(auc_score)
 
     # Display as percentage
     print(f"Precision: {precision:.2f}%")
@@ -134,6 +148,47 @@ plt.savefig(f"{results_path}/roc_curves_all_models.png")
 plt.close()
 
 print("\n Evaluation complete. All plots saved to 'outputs/resultsAnalysisVisualization/'.")
+
+
+# ==== Precision, Recall, and F1 scores for each model ====
+ 
+
+# ==== Grouped Bar Chart for Precision, Recall, and F1 scores ====
+x = np.arange(len(model_names))  # model indices
+width = 0.25  # bar width
+
+fig, ax = plt.subplots(figsize=(10, 6))
+
+bars1 = ax.bar(x - width, precisions, width, label='Precision')
+bars2 = ax.bar(x, recalls, width, label='Recall')
+bars3 = ax.bar(x + width, f1_scores, width, label='F1-Score')
+
+# Labels and formatting
+ax.set_ylabel('Score (%)')
+ax.set_xlabel('Models')
+ax.set_title('Model Comparison: Precision, Recall, and F1-Score')
+ax.set_xticks(x)
+ax.set_xticklabels(model_names)
+ax.legend()
+ax.set_ylim(0, 110)
+
+# Annotate bars with values
+for bars in [bars1, bars2, bars3]:
+    for bar in bars:
+        height = bar.get_height()
+        ax.annotate(f'{height:.2f}%',
+                    xy=(bar.get_x() + bar.get_width() / 2, height),
+                    xytext=(0, 3),
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+
+# Save plot
+plt.tight_layout()
+plt.savefig(f"{results_path}/model_precision_recall_f1.png")
+plt.close()
+
+print("✅ Precision, Recall, and F1-Score comparison chart saved to '../outputs/resultsAnalysisVisualization/model_precision_recall_f1.png'")
+
 
 # ==========  SAVE METRICS REPORT TO TEXT FILE ==========
 report_path = '../models/model_evaluation_report.txt'

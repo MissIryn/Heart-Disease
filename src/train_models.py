@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import os
 import joblib
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -88,6 +89,47 @@ os.makedirs('../models', exist_ok=True)
 joblib.dump(svm_best, '../models/svm_model.pkl')
 joblib.dump(rf, '../models/random_forest_model.pkl')
 joblib.dump(hybrid_stacked, '../models/hybrid_svm_model.pkl')
+ 
+ # ==== Prepare Data for Accuracy Visualization ====
+models = ["SVM", "Random Forest", "Hybrid Stacked"]
+
+train_acc = [svm_train_acc, rf_train_acc, hybrid_train_acc]
+test_acc = [svm_test_acc, rf_test_acc, hybrid_test_acc]
+
+# ==== Grouped Bar Chart ====
+x = np.arange(len(models))  # model indices
+width = 0.35  # bar width
+
+fig, ax = plt.subplots(figsize=(8, 6))
+
+bars1 = ax.bar(x - width/2, train_acc, width, label='Train Accuracy')
+bars2 = ax.bar(x + width/2, test_acc, width, label='Test Accuracy')
+
+# Labels and formatting
+ax.set_ylabel('Accuracy (%)')
+ax.set_xlabel('Models')
+ax.set_title('Model Accuracy Performance (Train vs Test)')
+ax.set_xticks(x)
+ax.set_xticklabels(models)
+ax.legend()
+ax.set_ylim(0, 110)
+
+# Annotate bars with values
+for bars in [bars1, bars2]:
+    for bar in bars:
+        height = bar.get_height()
+        ax.annotate(f'{height:.2f}%',
+                    xy=(bar.get_x() + bar.get_width() / 2, height),
+                    xytext=(0, 3),
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+
+# Save visualization
+plt.tight_layout()
+plt.savefig("../outputs/resultsAnalysisVisualization/model_accuracy_only.png")
+plt.close()
+
+print("✅ Accuracy visualization (Train vs Test) saved to '../outputs/resultsAnalysisVisualization/model_accuracy_only.png'")
 
 # ==== Log model performance ==== 
 with open("../models/model_accuracy_log.txt", "w") as f:
